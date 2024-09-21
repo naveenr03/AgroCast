@@ -28,7 +28,7 @@ const Login = () => {
       const response = await axios.post("http://localhost:5000/auth/login", {username, password});
       setCookie("access_token", response.data.token);
       window.localStorage.setItem("userID", response.data.userID);
-      navigate("/");
+      navigate("/home");
     }
     catch (error) {
       console.error(error.response.data);

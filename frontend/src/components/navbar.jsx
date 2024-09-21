@@ -12,14 +12,14 @@ export  const Navbar = () => {
     const logout = () => {
         setCookies("access_token", "")
         window.localStorage.removeItem("userID")
-        navigate("/auth")
+        navigate("/")
     }
 
     return (
         <div className="navbar">
-            <Link to="/">Home</Link>
+            <Link to="/home">Home</Link>
             {!cookies.access_token ?
-             <Link to="/auth">Login/Register</Link> : <button onClick={logout}>Logout</button>}
+             <Link to="/">Login/Register</Link> : <button onClick={logout}>Logout</button>}
         </div>
     )
 }
