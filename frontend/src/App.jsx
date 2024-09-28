@@ -4,7 +4,7 @@ import { Auth } from './pages/auth'
 import { Navbar } from './components/navbar'
 import './App.css'
 import Test from './pages/test'
-
+import TestML from './pages/testML'
 
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
           <Route path="/" element={<Auth />} />
           <Route path="/home" element={<Home />} />
           <Route path="/test" element={<Test />} />
+          <Route path="/testML" element={<TestML />} />
       
         </Routes>
       </Router>

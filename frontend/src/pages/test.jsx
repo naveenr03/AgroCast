@@ -5,7 +5,9 @@ const Test = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [location, setLocation] = useState("");
 
+//eslint-disable-next-line
   const fetchWeather = async (e) => {
+
     event.preventDefault();
     try {
       const response = await axios.get("http://localhost:5000/api/weather", {
@@ -20,36 +22,9 @@ const Test = () => {
     }
   };
 
-  function estimateEvaporation(temp, humidity, windSpeed, sunshine, pressure) {
-    // Saturation vapor pressure in kPa (using temp in Celsius)
-    const saturationVaporPressure = 0.6108 * Math.exp((17.27 * temp) / (temp + 237.3));
 
-    // Actual vapor pressure in kPa (humidity is in %)
-    const actualVaporPressure = saturationVaporPressure * (humidity / 100);
-
-    // Evaporation formula (this is a simplified approximation)
-    let evaporation = 0.5 * windSpeed * (saturationVaporPressure - actualVaporPressure);
-
-    // Adjust based on sunshine (more sunshine = higher evaporation)
-    if (sunshine) {
-        evaporation *= 1.5;  // Increase evaporation rate if sunshine is present
-    }
-
-    // Adjust based on pressure (higher pressure slightly reduces evaporation)
-    evaporation *= 1000 / pressure;  // A basic adjustment for pressure
-
-    return evaporation.toFixed(2);  // Returns evaporation in mm/day
-}
-
-  const temp = weatherData.main.temp; // Celsius
-  const humidity = weatherData.main.humidity; // Percentage
-  const windSpeed = weatherData.wind.speed; // m/s
-  const pressure = weatherData.main.pressure; // hPa
-  const sunshine = weatherData.weather[0].description.includes("clear");
-
-
-const evaporation = estimateEvaporation(temp, humidity, windSpeed, sunshine, pressure);
-
+ 
+  
 
   return (
     <div>
@@ -96,7 +71,6 @@ const evaporation = estimateEvaporation(temp, humidity, windSpeed, sunshine, pre
           <p>Rain Today: {weatherData.rain ? "Yes" : "No"}</p>
           <p>Date: {new Date(weatherData.dt * 1000).toLocaleDateString()}</p>
           <p> description : {weatherData.weather[0].description} </p>
-          <p> Evaporation :  {evaporation} </p>
         </div>
       ) : (
         <p>Loading weather data...</p>
