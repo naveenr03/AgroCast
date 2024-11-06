@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import TestML from "./testML";
 
-// Mapping wind gust directions to an index
 const windgustdir = {
   'NNW': 0, 'NW': 1, 'WNW': 2, 'N': 3, 'W': 4, 'WSW': 5, 'NNE': 6, 'S': 7, 'SSW': 8,
   'SW': 9, 'SSE': 10, 'NE': 11, 'SE': 12, 'ESE': 13, 'ENE': 14, 'E': 15
@@ -15,7 +14,7 @@ function getDate() {
   const date = today.getDate();
   return `${month}/${date}/${year}`;
 }
-// Function to convert degrees to wind direction (16 compass points)
+
 const degreesToCompass = (deg) => {
   const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
   const index = Math.round(deg / 22.5) % 16;
@@ -56,37 +55,27 @@ const Test = () => {
       });
       const data = response.data;
 
-      // Map wind direction from degrees to compass direction
       const windDirection = degreesToCompass(data.wind.deg);
-      const windDirectionIndex = windgustdir[windDirection] || "N/A"; // Fallback if not found
+      const windDirectionIndex = windgustdir[windDirection] || "N/A"; 
 
-      // Format Sunshine (inferred from cloudiness)
       const cloudiness = data.clouds.all;
       const sunshine = 14.5 * (1 - cloudiness / 100);
-
-      // Format Cloud (scale to 0-9)
       const cloudScale = (cloudiness / 100) * 9;
-
-      // Approximate evaporation
       const temp = data.main.temp;
       const humidity = data.main.humidity;
       const windSpeed = data.wind.speed;
 
-      // Dew point approximation
       const dewPoint = temp - ((100 - humidity) / 5);
 
-      // Empirical formula for evaporation
+
       let evaporation = ((temp - dewPoint) / 30) * (1 - humidity / 100) + (windSpeed / 10);
       evaporation = evaporation > 0 ? evaporation.toFixed(1) : 0.0;
 
-
-
-      // Format the data into the required format
       const formattedData = {
         date: getDate(),
         minTemp: data.main.temp_min,
         maxTemp: data.main.temp_max,
-        rainfall: data.rain ? data.rain["1h"] || 0 : 0, // Rainfall in mm
+        rainfall: data.rain ? data.rain["1h"] || 0 : 0, 
         evaporation: evaporation,
         sunshine: sunshine.toFixed(1),
         windGustSpeed: data.wind.gust || "N/A",
@@ -100,7 +89,7 @@ const Test = () => {
       };
 
       setWeatherData(formattedData);
-      console.log(formattedData);
+      console.log(formattedData); 
     } catch (error) {
       console.error("Error fetching weather data:", error);
     }

@@ -28,10 +28,11 @@ const Login = () => {
       const response = await axios.post("http://localhost:5000/auth/login", {username, password});
       setCookie("access_token", response.data.token);
       window.localStorage.setItem("userID", response.data.userID);
+      window.localStorage.setItem("username", response.data.username);
       navigate("/home");
     }
     catch (error) {
-      console.error(error.response.data);
+      console.error(error.response);
     }
   }
     
@@ -60,7 +61,7 @@ const Register = () => {
       alert("User registered successfully"); 
     }
     catch (error) {
-      console.error(error.response.data);
+      console.error(error.response);
     }
   }
 
@@ -85,7 +86,7 @@ const Form = ({ username, setUsername, password, setPassword, label, onSubmit })
         <div className="form-group">
           <input
             type="text"
-            placeholder="Username"
+            placeholder="email"
             id="username"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
