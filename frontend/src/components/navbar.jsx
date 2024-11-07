@@ -15,12 +15,12 @@ export const Navbar = () => {
     
 
     return (
-        <div className="navbar">
-            <Link to="/home">Home</Link>
+        <div className="navbar bg-black text-white flex justify-center items-center h-20">
+            <Link to="/home" className="mx-4 text-lg">Home</Link>
             {!cookies.access_token ? (
-                <Link to="/">Login/Register</Link>
+                <Link to="/" className="mx-4 text-lg">Login/Register</Link>
             ) : (
-                <button onClick={logout}>Logout</button>
+                <button onClick={logout} className="mx-4 text-lg">Logout</button>
             )}
         </div>
     );

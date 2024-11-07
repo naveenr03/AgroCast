@@ -27,9 +27,11 @@ const Test = () => {
 
   useEffect(() => {
     const userLocation = window.localStorage.getItem("location");
-    console.log(userLocation);
+    console.log("Retrieved location:", userLocation);
     if (userLocation) {
-      setLocation(userLocation);
+      const formattedLocation = userLocation.charAt(0).toUpperCase() + userLocation.slice(1).toLowerCase();
+      setLocation(formattedLocation);
+      fetchWeather(formattedLocation);
     }
   }, []);
 
@@ -47,8 +49,8 @@ const Test = () => {
     'Thirumangalam': 45, 'Tenkasi': 46, 'Chengalpattu': 47
   };
 
-  const fetchWeather = async () => {
-    const locationIndex = locationMapping[location];
+  const fetchWeather = async (formattedLocation) => {
+    const locationIndex = locationMapping[formattedLocation];
 
     if (locationIndex === undefined) {
       alert("Invalid location. Please enter a valid location.");
@@ -57,9 +59,10 @@ const Test = () => {
 
     try {
       const response = await axios.get("http://localhost:5000/api/weather", {
-        params: { location: location },
+        params: { location: formattedLocation },
       });
       const data = response.data;
+      console.log("Weather data fetched:", data);
 
       const windDirection = degreesToCompass(data.wind.deg);
       const windDirectionIndex = windgustdir[windDirection] || "N/A"; 
@@ -93,7 +96,6 @@ const Test = () => {
       };
 
       setWeatherData(formattedData);
-      console.log(formattedData); 
     } catch (error) {
       console.error("Error fetching weather data:", error);
     }
@@ -102,7 +104,6 @@ const Test = () => {
   return (
     <div>
       <h1>Weather Data for {location}</h1>
-      <button onClick={fetchWeather}>Fetch Weather Data</button>
 
       {weatherData ? (
         <div>
@@ -123,7 +124,7 @@ const Test = () => {
           <TestML weatherData={weatherData} />
         </div>
       ) : (
-        <p>Click the button to load weather data.</p>
+        <p>Loading weather data...</p>
       )}
     </div>
   );

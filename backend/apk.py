@@ -2,9 +2,16 @@ import pickle
 import pandas as pd
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
 
+# Get the current directory of the script
+current_dir = os.path.dirname(__file__)
 
-model = pickle.load(open("backend/ml_model/catml.pkl", "rb"))
+# Construct the full path to the model file
+model_path = os.path.join(current_dir, "ml_model/catml.pkl")
+
+# Load the model
+model = pickle.load(open(model_path, "rb"))
 print("Model Loaded")
 
 app = Flask(__name__)
