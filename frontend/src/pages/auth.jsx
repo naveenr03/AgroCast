@@ -1,14 +1,30 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import axios from "axios";
-import {useCookies} from "react-cookie";
+import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
 export const Auth = () => {
+  const [isLogin, setIsLogin] = useState(true);
+
   return (
-    <div className="auth">
-      <Login />
-      <Register />
+    <div className="min-h-screen bg-green-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-green-900">
+            {isLogin ? "Sign in to your account" : "Create a new account"}
+          </h2>
+        </div>
+        {isLogin ? <Login /> : <Register />}
+        <div className="text-center">
+          <button
+            onClick={() => setIsLogin(!isLogin)}
+            className="font-medium text-green-600 hover:text-green-500"
+          >
+            {isLogin ? "Need an account? Register" : "Already have an account? Login"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -16,12 +32,14 @@ export const Auth = () => {
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const [_, setCookie] = useCookies(["access_token"]);
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    setError("");
 
     try {
       const response = await axios.post("http://localhost:5000/auth/login", { username, password });
@@ -32,6 +50,7 @@ const Login = () => {
       navigate("/home");
     } catch (error) {
       console.error(error.response);
+      setError("Invalid credentials. Please try again.");
     }
   };
 
@@ -43,6 +62,7 @@ const Login = () => {
       setPassword={setPassword}
       label="Login"
       onSubmit={onSubmit}
+      error={error}
     />
   );
 };
@@ -51,18 +71,20 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [location, setLocation] = useState("");
+  const [error, setError] = useState("");
 
   const onSubmit = async (event) => { 
     event.preventDefault();
+    setError("");
   
     try {
       await axios.post("http://localhost:5000/auth/register", { username, password, location });
-
       window.localStorage.setItem("username", username);
       window.localStorage.setItem("location", location);
-      alert("User registered successfully"); 
+      alert("User registered successfully. Please login."); 
     } catch (error) {
       console.error(error.response);
+      setError("Registration failed. Please try again.");
     }
   };
 
@@ -75,47 +97,78 @@ const Register = () => {
       location={location}
       setLocation={setLocation}
       label="Register"
-      onSubmit={onSubmit}  
+      onSubmit={onSubmit}
+      error={error}
     />
   );
 };
 
-const Form = ({ username, setUsername, password, setPassword, location, setLocation, label, onSubmit }) => {
+const Form = ({ username, setUsername, password, setPassword, location, setLocation, label, onSubmit, error }) => {
   return (
-    <div className="auth-container">
-      <form onSubmit={onSubmit}>
-        <h1>{label}</h1>
-        <div className="form-group">
+    <form onSubmit={onSubmit} className="mt-8 space-y-6">
+      <input type="hidden" name="remember" value="true" />
+      <div className="rounded-md shadow-sm -space-y-px">
+        <div>
+          <label htmlFor="username" className="sr-only">Email address</label>
           <input
-            type="text"
-            placeholder="email"
             id="username"
+            name="username"
+            type="email"
+            autoComplete="email"
+            required
+            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+            placeholder="Email address"
             value={username}
-            onChange={(event) => setUsername(event.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div className="form-group">
+        <div>
+          <label htmlFor="password" className="sr-only">Password</label>
           <input
-            type="password"
-            placeholder="Password"
             id="password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+            placeholder="Password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         {label === "Register" && (
-          <div className="form-group">
+          <div>
+            <label htmlFor="location" className="sr-only">Location</label>
             <input
-              type="text"
-              placeholder="Location"
               id="location"
+              name="location"
+              type="text"
+              required
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+              placeholder="Location"
               value={location}
-              onChange={(event) => setLocation(event.target.value)}
+              onChange={(e) => setLocation(e.target.value)}
             />
           </div>
         )}
-        <button type="submit">{label}</button>
-      </form>
-    </div>
+      </div>
+
+      {error && (
+        <div className="text-red-500 text-sm mt-2">
+          {error}
+        </div>
+      )}
+
+      <div>
+        <button
+          type="submit"
+          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        >
+          {label}
+        </button>
+      </div>
+    </form>
   );
 };
+
+export default Auth;

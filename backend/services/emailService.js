@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 dotenv.config();
-
 const transporter = nodemailer.createTransport({
   service: 'gmail',  
   auth: {
@@ -11,6 +10,8 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendPredictionEmail = async (email, predictionData) => {
+
+
   try {
     console.log(email);
 
@@ -48,7 +49,7 @@ export const sendPredictionEmail = async (email, predictionData) => {
 
     const message = {
       from: process.env.EMAIL_USER,
-      to: "madridstanaveen003@gmail.com",
+      to: email,
       subject: "Weather Prediction Data",
       html: `<div style="font-family: Arial, sans-serif; line-height: 1.6;">${weatherMessage}</div>`,
     };

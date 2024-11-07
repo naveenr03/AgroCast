@@ -4,8 +4,10 @@ import { Auth } from './pages/auth'
 import { Navbar } from './components/navbar'
 import Test from './pages/test'
 import TestML from './pages/testML'
-import CropRecommendation from './pages/crop'
+import Crop from './pages/crop'
+import CropRecommendation from './pages/cropRecommendation'
 import './App.css'
+
 
 function App() {
   return (
@@ -15,9 +17,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Auth />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/test" element={<Test />} />
+          <Route path="/weather" element={<Test />} />
           <Route path="/testML" element={<TestML />} />
-          <Route path="/crop" element={<CropRecommendation />} />
+          <Route path="/crop" element={<Crop />} />
+          <Route path="/crop-recommendation" element={<CropRecommendation />} />
         </Routes>
       </Router>
     </>

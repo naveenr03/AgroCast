@@ -6,6 +6,7 @@ import { WeatherRouter } from './services/weatherService.js';
 import connectDB from './config/db.js'
 import { predictionRouter } from './routes/predictionRoute.js';
 import { recommendationRouter } from './routes/cropRecommendation.js';
+import { cropRecommendationRouter } from './routes/demo.js';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use('/auth', userRouter);
 app.use('/api', WeatherRouter);
 app.use('/api', predictionRouter);
 app.use('/api', recommendationRouter);
+app.use('/api', cropRecommendationRouter);
 
 app.listen(5000, () => {
     console.log('Server started on http://localhost:5000');

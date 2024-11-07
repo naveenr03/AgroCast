@@ -24,6 +24,7 @@ const degreesToCompass = (deg) => {
 const Test = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [location, setLocation] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const userLocation = window.localStorage.getItem("location");
@@ -55,6 +56,7 @@ const Test = () => {
       return;
     }
 
+    setLoading(true);
     try {
       const response = await axios.get("http://localhost:5000/api/weather", {
         params: { location: location },
@@ -96,37 +98,56 @@ const Test = () => {
       console.log(formattedData); 
     } catch (error) {
       console.error("Error fetching weather data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h1>Weather Data for {location}</h1>
-      <button onClick={fetchWeather}>Fetch Weather Data</button>
+    <div className="bg-white shadow-md rounded-lg p-6 max-w-2xl mx-auto mt-10">
+      <h1 className="text-3xl font-bold text-green-800 mb-4">Weather Data for {location}</h1>
+      <button 
+        onClick={fetchWeather}
+        disabled={loading}
+        className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105 mb-4"
+      >
+        {loading ? "Fetching..." : "Fetch Weather Data"}
+      </button>
 
       {weatherData ? (
-        <div>
-          <h1>Weather in {location}</h1>
-          <p>Min Temp: {weatherData.minTemp}°C</p>
-          <p>Max Temp: {weatherData.maxTemp}°C</p>
-          <p>Rainfall: {weatherData.rainfall} mm</p>
-          <p>Evaporation: {weatherData.evaporation}</p>
-          <p>Sunshine: {weatherData.sunshine} hours</p>
-          <p>Wind Gust Direction Index: {weatherData.windGustDir}</p>
-          <p>Wind Gust Speed: {weatherData.windGustSpeed} m/s</p>
-          <p>Humidity: {weatherData.humidity}%</p>
-          <p>Pressure: {weatherData.pressure} hPa</p>
-          <p>Cloud (0-9 scale): {weatherData.cloud}</p>
-          <p>Temperature: {weatherData.temp}°C</p>
-          <p>Rain Today: {weatherData.rainToday}</p>
-          <p>Date: {weatherData.date}</p>
-          <TestML weatherData={weatherData} />
+        <div className="mt-6 space-y-4">
+          <h2 className="text-2xl font-semibold text-green-800 border-b border-green-200 pb-2">Weather in {location}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <WeatherItem label="Min Temp" value={`${weatherData.minTemp}°C`} />
+            <WeatherItem label="Max Temp" value={`${weatherData.maxTemp}°C`} />
+            <WeatherItem label="Rainfall" value={`${weatherData.rainfall} mm`} />
+            <WeatherItem label="Evaporation" value={weatherData.evaporation} />
+            <WeatherItem label="Sunshine" value={`${weatherData.sunshine} hours`} />
+            <WeatherItem label="Wind Gust Direction Index" value={weatherData.windGustDir} />
+            <WeatherItem label="Wind Gust Speed" value={`${weatherData.windGustSpeed} m/s`} />
+            <WeatherItem label="Humidity" value={`${weatherData.humidity}%`} />
+            <WeatherItem label="Pressure" value={`${weatherData.pressure} hPa`} />
+            <WeatherItem label="Cloud (0-9 scale)" value={weatherData.cloud} />
+            <WeatherItem label="Temperature" value={`${weatherData.temp}°C`} />
+            <WeatherItem label="Rain Today" value={weatherData.rainToday} />
+            <WeatherItem label="Date" value={weatherData.date} />
+          </div>
+          <div className="mt-6">
+            <TestML weatherData={weatherData} />
+          </div>
         </div>
       ) : (
-        <p>Click the button to load weather data.</p>
+        <p className="text-gray-600">Click the button to load weather data.</p>
       )}
     </div>
   );
 };
+
+const WeatherItem = ({ label, value }) => (
+  <div className="bg-green-100 p-4 rounded-lg">
+    <p className="font-semibold text-green-800 mb-1">{label}:</p>
+    <p className="text-gray-700">{value}</p>
+  </div>
+);
 
 export default Test;
