@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import TestML from "./testML";
 
@@ -25,6 +25,14 @@ const Test = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [location, setLocation] = useState("");
 
+  useEffect(() => {
+    const userLocation = window.localStorage.getItem("location");
+    console.log(userLocation);
+    if (userLocation) {
+      setLocation(userLocation);
+    }
+  }, []);
+
   const locationMapping = {
     'Neyveli': 0, 'Nagapattinam': 1, 'Theni': 2, 'Pudukkottai': 3, 'Vellore': 4,
     'Thiruvarur': 5, 'Virudhunagar': 6, 'Krishnagiri': 7, 'Tiruchirappalli': 8,
@@ -39,9 +47,7 @@ const Test = () => {
     'Thirumangalam': 45, 'Tenkasi': 46, 'Chengalpattu': 47
   };
 
-  const fetchWeather = async (e) => {
-    e.preventDefault();
-
+  const fetchWeather = async () => {
     const locationIndex = locationMapping[location];
 
     if (locationIndex === undefined) {
@@ -66,8 +72,6 @@ const Test = () => {
       const windSpeed = data.wind.speed;
 
       const dewPoint = temp - ((100 - humidity) / 5);
-
-
       let evaporation = ((temp - dewPoint) / 30) * (1 - humidity / 100) + (windSpeed / 10);
       evaporation = evaporation > 0 ? evaporation.toFixed(1) : 0.0;
 
@@ -97,24 +101,8 @@ const Test = () => {
 
   return (
     <div>
-      <form onSubmit={fetchWeather}>
-        <label>
-          Location:
-          <input
-            type="text"
-            name="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            list="location-list"
-          />
-          <datalist id="location-list">
-            {Object.keys(locationMapping).map((loc) => (
-              <option key={loc} value={loc} />
-            ))}
-          </datalist>
-          <button type="submit">Get Weather</button>
-        </label>
-      </form>
+      <h1>Weather Data for {location}</h1>
+      <button onClick={fetchWeather}>Fetch Weather Data</button>
 
       {weatherData ? (
         <div>
@@ -132,13 +120,11 @@ const Test = () => {
           <p>Temperature: {weatherData.temp}°C</p>
           <p>Rain Today: {weatherData.rainToday}</p>
           <p>Date: {weatherData.date}</p>
-          <TestML weatherData = {weatherData} />
+          <TestML weatherData={weatherData} />
         </div>
-
       ) : (
-        <p>Loading weather data...</p>
+        <p>Click the button to load weather data.</p>
       )}
-      
     </div>
   );
 };

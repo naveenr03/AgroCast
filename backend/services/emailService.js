@@ -15,7 +15,6 @@ export const sendPredictionEmail = async (email, predictionData) => {
     console.log(email);
 
     console.log(predictionData);
-    // Define a styled HTML message template based on weather condition
     let weatherMessage = '';
     if (predictionData === 'Sunny') {
       weatherMessage = `
@@ -49,7 +48,7 @@ export const sendPredictionEmail = async (email, predictionData) => {
 
     const message = {
       from: process.env.EMAIL_USER,
-      to: email,
+      to: "madridstanaveen003@gmail.com",
       subject: "Weather Prediction Data",
       html: `<div style="font-family: Arial, sans-serif; line-height: 1.6;">${weatherMessage}</div>`,
     };

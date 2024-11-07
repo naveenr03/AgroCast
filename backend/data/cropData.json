@@ -1,0 +1,23 @@
+{
+    "kharif": [
+      { "name": "Rice", "rainfall": [100, 150], "temperature": [20, 35], "regions": ["Delta regions", "Thanjavur", "Thiruvarur", "Nagapattinam"] },
+      { "name": "Millets", "rainfall": [60, 80], "temperature": [20, 30], "regions": ["Coimbatore", "Salem", "Dharmapuri"] },
+      { "name": "Maize", "rainfall": [50, 75], "temperature": [20, 30], "regions": ["Krishnagiri", "Namakkal", "Perambalur"] },
+      { "name": "Cotton", "rainfall": [50, 100], "temperature": [21, 30], "regions": ["Coimbatore", "Madurai", "Ramanathapuram"] }
+    ],
+    "rabi": [
+      { "name": "Groundnut", "rainfall": [50, 60], "temperature": [20, 30], "regions": ["Thiruvannamalai", "Vellore", "Villupuram"] },
+      { "name": "Sugarcane", "rainfall": [100, 150], "temperature": [20, 40], "regions": ["Cuddalore", "Erode", "Salem", "Vellore"] },
+      { "name": "Sunflower", "rainfall": [50, 60], "temperature": [20, 30], "regions": ["Coimbatore", "Thoothukudi"] },
+      { "name": "Pulses", "rainfall": [30, 50], "temperature": [20, 25], "regions": ["Cuddalore", "Kancheepuram"] }
+    ],
+    "perennial": [
+      { "name": "Banana", "rainfall": [60, 80], "temperature": [24, 30], "regions": ["Trichy", "Theni", "Coimbatore"] },
+      { "name": "Coconut", "rainfall": [100, 150], "temperature": [27, 32], "regions": ["Pollachi", "Coimbatore", "Kanyakumari"] },
+      { "name": "Turmeric", "rainfall": [100, 200], "temperature": [20, 30], "regions": ["Erode", "Salem"] }
+    ],
+    "winter": [
+      { "name": "Vegetables", "rainfall": [0, 10], "temperature": [20, 25], "regions": ["Dharmapuri", "Salem"] }
+    ]
+  }
+  
